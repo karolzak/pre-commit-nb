@@ -4,11 +4,10 @@ import mimetypes
 import os
 import re
 import subprocess
+import urllib
 import uuid
 from typing import Optional, Sequence
 from urllib.parse import urlparse
-
-import requests
 
 
 def base64_to_blob_storage(
@@ -52,16 +51,23 @@ def put_blob(
     url = storage_url + container_name + '/' + blob_name + '?' + qry_string
 
     # with open(file_name_full_path, 'rb') as fh:
-    response = requests.put(
-        url,
-        data=image_bytes,
+    req = urllib.request.Request(
+        url, data=image_bytes, method='PUT',
         headers={
                     'content-type': mimetypes.types_map[file_ext],
                     'x-ms-blob-type': 'BlockBlob'
-                },
-        params={'file': file_name_only}
-    )
-    return response.status_code, url
+                })
+    response_code = urllib.request.urlopen(req).code
+    # response_code = requests.put(
+    #     url,
+    #     data=image_bytes,
+    #     headers={
+    #                 'content-type': mimetypes.types_map[file_ext],
+    #                 'x-ms-blob-type': 'BlockBlob'
+    #             },
+    #     params={'file': file_name_only}
+    # ).status_code
+    return response_code, url
 
 
 def base64_to_local_file(base64_string: str, image_path: str):
