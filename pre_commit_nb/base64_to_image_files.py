@@ -1,15 +1,70 @@
 import argparse
-import re
-import os
 import base64
-import uuid
-from typing import List
-from typing import Optional
-from typing import Sequence
+import mimetypes
+import os
+import re
 import subprocess
+import uuid
+from typing import Optional, Sequence
+from urllib.parse import urlparse
+
+import requests
 
 
-def base64_to_image_file(base64_string: str, image_path: str):
+def base64_to_blob_storage(
+        base64_string: str,
+        sas_url: str,
+        image_path: str):
+    print("Uploading image to blob storage...")
+    image_bytes = base64.decodebytes(base64_string.encode())
+
+    o = urlparse(sas_url)
+    # Remove first / from path
+    if o.path[0] == '/':
+        blob_storage_path = o.path[1:]
+    else:
+        blob_storage_path = o.path
+
+    storage_account = o.scheme + "://" + o.netloc + "/"
+    file_name_only = os.path.basename(image_path)
+
+    response_status, url_path = put_blob(
+        storage_account, blob_storage_path,
+        file_name_only, o.query, image_path, image_bytes
+    )
+
+    if response_status >= 200 and response_status < 300:
+        print(f"Successfully uploaded image to blob storage: {url_path}")
+    else:
+        print(f"Uploading process failed with response code: {response_status}")  # NOQA E501
+
+    return url_path
+
+
+def put_blob(
+        storage_url: str, container_name: str, blob_name: str,
+        qry_string: str, image_name: str, image_bytes):
+
+    file_name_only = os.path.basename(image_name)
+
+    file_ext = os.path.splitext(file_name_only)[1]
+
+    url = storage_url + container_name + '/' + blob_name + '?' + qry_string
+
+    # with open(file_name_full_path, 'rb') as fh:
+    response = requests.put(
+        url,
+        data=image_bytes,
+        headers={
+                    'content-type': mimetypes.types_map[file_ext],
+                    'x-ms-blob-type': 'BlockBlob'
+                },
+        params={'file': file_name_only}
+    )
+    return response.status_code, url
+
+
+def base64_to_local_file(base64_string: str, image_path: str):
     os.makedirs(os.path.dirname(image_path), exist_ok=True)
     with open(image_path, "wb") as fh:
         fh.write(base64.decodebytes(base64_string.encode()))
@@ -25,6 +80,7 @@ def process_nb(
         filename: str,
         add_changes_to_staging: bool,
         auto_commit_changes: bool,
+        az_blob_container_url: str,
         **kwargs
         ) -> int:
     print("==================")
@@ -43,12 +99,27 @@ def process_nb(
             image_path = "nb_images" + "/" + str(uuid.uuid4()) + ext
 
             full_path = "./" + os.path.dirname(filename) + "/" + image_path
-            print("Base64 string found. Converting it to image file and saving as %s" % full_path)
-            base64_string = match.split(':')[1].replace('"', '').replace(' ', '').replace('\\n', '')
-            base64_to_image_file(base64_string, full_path)
+
+            base64_string = (
+                match.split(':')[1]
+                .replace('"', '')
+                .replace(' ', '')
+                .replace('\\n', '')
+            )
+
+            if az_blob_container_url:
+                response_code, url_path = base64_to_blob_storage(
+                    base64_string, az_blob_container_url, full_path
+                )
+            else:
+                print("Converting base64 to image file and saving as %s" % full_path)  # NOQA E501
+                base64_to_local_file(
+                    base64_string, full_path
+                )
+                url_path = "./" + image_path
+
             new_files += " " + full_path
 
-            url_path = "./" + image_path
             data = data.replace(match, create_nb_cell_output(url_path))
 
     if len(new_files) > 0:
@@ -82,6 +153,10 @@ def git_add(filenames: str):
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument('filenames', nargs='*', help='Filenames to fix')
+    parser.add_argument(
+        '--az_blob_container_url',
+        default=None,
+        help='If provided it will upload images to external Azure Blob Storage container rather than local files')  # NOQA E501
     parser.add_argument(
         '--add_changes_to_staging',
         default=False, action='store_true',
