@@ -4,7 +4,7 @@ import mimetypes
 import os
 import re
 import subprocess
-import urllib
+import urllib.request
 import uuid
 from typing import Optional, Sequence
 from urllib.parse import urlparse
