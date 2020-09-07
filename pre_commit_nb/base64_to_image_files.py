@@ -154,15 +154,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument('filenames', nargs='*', help='Filenames to fix')
     parser.add_argument(
-        '--az_blob_container_url',
+        '--az-blob_container-url',
         default=None,
         help='If provided it will upload images to external Azure Blob Storage container rather than local files')  # NOQA E501
     parser.add_argument(
-        '--add_changes_to_staging',
+        '--add-changes-to-staging',
         default=False, action='store_true',
         help='Automatically add new and changed files to staging')
     parser.add_argument(
-        '--auto_commit_changes', default=False, action='store_true',
+        '--auto-commit-changes', default=False, action='store_true',
         help='Automatically commits added and changed files in staging')
     args = parser.parse_args(argv)
 
