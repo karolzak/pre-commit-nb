@@ -6,7 +6,7 @@ with open("README.md") as f:
 
 setup(
     name="pre_commit_nb",
-    version="0.2.2a3",
+    version="0.2.2a4",
     description="Set of git pre-commit hooks for Jupyter Notebooks compatible with https://pre-commit.com/ framework",  # NOQA E501
     long_description=long_description,
     long_description_content_type="text/markdown",  # This is important!

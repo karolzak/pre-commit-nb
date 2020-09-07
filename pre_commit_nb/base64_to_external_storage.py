@@ -12,7 +12,6 @@ def base64_to_blob_storage(
         base64_string: str,
         az_blob_container_sas_url: str,
         image_path: str) -> (int, str):
-    print("Uploading image to blob storage...")
     image_bytes = base64_string_to_bytes(base64_string)
 
     o = urlparse(az_blob_container_sas_url)
@@ -42,14 +41,15 @@ def http_put(
     file_ext = os.path.splitext(file_name_only)[1]
 
     url = storage_url + container_name + '/' + blob_name + '?' + qry_string
-
     req = urllib.request.Request(
         url, data=image_bytes, method='PUT',
         headers={
                     'content-type': mimetypes.types_map[file_ext],
                     'x-ms-blob-type': 'BlockBlob'
                 })
-    response_code = urllib.request.urlopen(req).code
+    with urllib.request.urlopen(req) as response:
+        response_code = response.code
+    # response_code = urllib.request.urlopen(req).code
     # response_code = requests.put(
     #     url,
     #     data=image_bytes,

@@ -60,6 +60,7 @@ def process_nb(
             from pre_commit_nb.base64_to_external_storage import (
                 base64_to_blob_storage)
 
+            print("Uploading image to blob storage...")
             response_status, url_path = base64_to_blob_storage(
                 base64_string, az_blob_container_url, full_path
             )
