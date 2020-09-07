@@ -114,7 +114,7 @@ def process_nb(
             )
 
             if az_blob_container_url:
-                response_code, url_path = base64_to_blob_storage(
+                url_path = base64_to_blob_storage(
                     base64_string, az_blob_container_url, full_path
                 )
             else:
