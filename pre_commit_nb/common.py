@@ -67,14 +67,14 @@ def process_nb(
             )
 
             if response_status >= 200 and response_status < 300:
-                print(f"Successfully uploaded image to blob storage: {url_path}")  # NOQA E501
+                print("Successfully uploaded image to blob storage: " + url_path)  # NOQA E501
             else:  # pragma: no cover
-                print(f"Uploading process failed with response code: {response_status}")  # NOQA E501
+                print("Uploading process failed with response code: " + response_status)  # NOQA E501
         else:
             from pre_commit_nb.base64_to_image_files import (
                 base64_to_local_file)
 
-            print(f"Converting base64 to image file and saving as {full_path}")
+            print("Converting base64 to image file and saving as " + full_path)
             base64_to_local_file(
                 base64_string, full_path
             )
