@@ -96,8 +96,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     for filename in args.filenames:
         # print(f'Processing {filename}')
         return_value = process_nb(filename=filename, **vars(args))
-        if return_value != 0:
-            print(f'Done converting base64 strings to files for {filename}')
+        # if return_value != 0:
+        #     print(f'Done converting base64 strings to files for {filename}')
         retv |= return_value
 
     return retv
