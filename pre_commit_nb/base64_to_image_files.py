@@ -94,6 +94,7 @@ def process_nb(
     print("Processing %s" % filename)
     with open(filename, 'r') as file:
         data = " ".join(file.readlines())
+        org_data = data.copy()
         matches = re.findall(
             r"\"image/(?:gif|png|jpeg|bmp|webp)\": \".*[a-zA-Z0-9+/=]\"",
             data)
@@ -123,15 +124,15 @@ def process_nb(
                     base64_string, full_path
                 )
                 url_path = "./" + image_path
-
-            new_files += " " + full_path
+                new_files += " " + full_path
 
             data = data.replace(match, create_nb_cell_output(url_path))
 
-    if len(new_files) > 0:
+    if org_data != data:
         with open(filename, 'w') as file:
             file.write(data)
             new_files += " " + filename
+            new_files = new_files.strip()
 
         if add_changes_to_staging:
             print("'--add_changes_to_staging' flag set to 'True' - added new and changed files to staging.")
