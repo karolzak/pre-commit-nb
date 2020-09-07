@@ -2,7 +2,7 @@ import argparse
 import os
 from typing import Optional, Sequence
 
-from .common import base64_string_to_bytes, process_nb
+from pre_commit_nb.common import base64_string_to_bytes, process_nb
 
 
 def base64_to_local_file(base64_string: str, image_path: str):

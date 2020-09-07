@@ -4,8 +4,8 @@ import re
 import subprocess
 import uuid
 
-from .base64_to_external_storage import base64_to_blob_storage
-from .base64_to_image_files import base64_to_local_file
+from pre_commit_nb.base64_to_external_storage import base64_to_blob_storage
+from pre_commit_nb.base64_to_image_files import base64_to_local_file
 
 
 def create_nb_cell_output(url: str) -> str:

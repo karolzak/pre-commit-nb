@@ -5,7 +5,7 @@ import urllib.request
 from typing import Optional, Sequence
 from urllib.parse import urlparse
 
-from .common import process_nb, base64_string_to_bytes
+from pre_commit_nb.common import process_nb, base64_string_to_bytes
 
 
 def base64_to_blob_storage(
