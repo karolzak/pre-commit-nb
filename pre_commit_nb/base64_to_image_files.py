@@ -154,7 +154,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument('filenames', nargs='*', help='Filenames to fix')
     parser.add_argument(
-        '--az-blob_container-url',
+        '--az-blob-container-url',
         default=None,
         help='If provided it will upload images to external Azure Blob Storage container rather than local files')  # NOQA E501
     parser.add_argument(
