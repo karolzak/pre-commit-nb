@@ -1,6 +1,6 @@
 repos:
     -   repo: https://github.com/karolzak/pre-commit-nb
-        rev: v0.0.2
+        rev: v0.1.0
         hooks:
             -   id: base64-to-image-files
                 args: [--add_commits_to_staging, --auto_commit_changes]
