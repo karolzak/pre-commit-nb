@@ -93,8 +93,8 @@ def process_nb(
     print(add_changes_to_staging, auto_commit_changes)
     print("Processing %s" % filename)
     with open(filename, 'r') as file:
-        data = " ".join(file.readlines())
-        org_data = data.copy()
+        org_data = " ".join(file.readlines())
+        data = org_data
         matches = re.findall(
             r"\"image/(?:gif|png|jpeg|bmp|webp)\": \".*[a-zA-Z0-9+/=]\"",
             data)
