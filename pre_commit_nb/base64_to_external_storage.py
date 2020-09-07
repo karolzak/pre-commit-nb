@@ -18,7 +18,7 @@ def base64_to_blob_storage(
     # Remove first / from path
     if o.path[0] == '/':
         blob_storage_path = o.path[1:]
-    else:
+    else:  # pragma: no cover
         blob_storage_path = o.path
 
     storage_account = o.scheme + "://" + o.netloc + "/"
@@ -49,16 +49,7 @@ def http_put(
                 })
     with urllib.request.urlopen(req) as response:
         response_code = response.code
-    # response_code = urllib.request.urlopen(req).code
-    # response_code = requests.put(
-    #     url,
-    #     data=image_bytes,
-    #     headers={
-    #                 'content-type': mimetypes.types_map[file_ext],
-    #                 'x-ms-blob-type': 'BlockBlob'
-    #             },
-    #     params={'file': file_name_only}
-    # ).status_code
+
     return response_code, url
 
 
@@ -87,5 +78,5 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     return retv
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     exit(main())

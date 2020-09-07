@@ -11,7 +11,7 @@ def create_nb_cell_output(url: str) -> str:
         ]""" % url
 
 
-def git_add(filenames: str):
+def git_add(filenames: str):  # pragma: no cover
     process = subprocess.Popen(
             ['git', 'add', *filenames.split()],
             shell=True,
@@ -32,7 +32,6 @@ def process_nb(
         **kwargs
         ) -> int:
     print("==================")
-    print(add_changes_to_staging, auto_commit_changes)
     print("Processing %s" % filename)
     with open(filename, 'r') as file:
         org_data = " ".join(file.readlines())
@@ -47,7 +46,9 @@ def process_nb(
         ext = "." + re.findall(r"image/[a-zA-Z]*", match)[0].split('/')[1]
         image_path = "nb_images" + "/" + str(uuid.uuid4()) + ext
 
-        full_path = "./" + os.path.dirname(filename) + "/" + image_path
+        full_path = ""
+        full_path += "" if os.path.isabs(os.path.dirname(filename)) else "./"
+        full_path += os.path.dirname(filename) + "/" + image_path
 
         base64_string = (
             match.split(':')[1]
@@ -60,14 +61,14 @@ def process_nb(
             from pre_commit_nb.base64_to_external_storage import (
                 base64_to_blob_storage)
 
-            print("Uploading image to blob storage...")
+            print("Converting base64 to image file and uploading it to blob storage...")  # NOQA E501
             response_status, url_path = base64_to_blob_storage(
                 base64_string, az_blob_container_url, full_path
             )
 
             if response_status >= 200 and response_status < 300:
                 print(f"Successfully uploaded image to blob storage: {url_path}")  # NOQA E501
-            else:
+            else:  # pragma: no cover
                 print(f"Uploading process failed with response code: {response_status}")  # NOQA E501
         else:
             from pre_commit_nb.base64_to_image_files import (
@@ -88,12 +89,12 @@ def process_nb(
             new_files += " " + filename
             new_files = new_files.strip()
 
-        if add_changes_to_staging:
+        if add_changes_to_staging:  # pragma: no cover
             print("'--add-changes-to-staging' flag set to 'True' - adding new and changed files to staging...")  # NOQA E501
             print(new_files)
             git_add(new_files)
 
-        if auto_commit_changes:
+        if auto_commit_changes:  # pragma: no cover
             print("'--auto-commit-changes' flag set to 'True' - git hook set to return exit code 0.")  # NOQA E501
             return 0
 

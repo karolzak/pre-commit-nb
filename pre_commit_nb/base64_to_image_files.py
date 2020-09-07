@@ -32,5 +32,5 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     return retv
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     exit(main())
