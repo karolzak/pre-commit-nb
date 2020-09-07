@@ -1,0 +1,6 @@
+-   id: base64-to-image-files
+    name: Convert base64 string to image files
+    description: Converts base64 strings in notebooks to image files and replaces them with URL to those files
+    entry: base64-to-image-files
+    language: python
+    files: .ipynb
