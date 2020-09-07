@@ -4,3 +4,4 @@
     entry: base64-to-image-files
     language: python
     files: .ipynb
+    args: [--auto_commit_changes]
