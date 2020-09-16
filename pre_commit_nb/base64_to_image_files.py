@@ -19,8 +19,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         default=False, action='store_true',
         help='Automatically add new and changed files to staging')
     parser.add_argument(
-        '--auto-commit-changes', default=False, action='store_true',
-        help='Automatically commits added and changed files in staging')
+        '--force-commit', default=False, action='store_true',
+        help='Forces `git commit` to go through even when there were some files modified with this git hook. Default behavior for `pre-commit` manager is to abort commit if git hook made any changes to staged files')  # NOQA E501
     args = parser.parse_args(argv)
 
     retv = 0

@@ -27,8 +27,10 @@ def base64_string_to_bytes(base64_string: str) -> bytes:
 def process_nb(
         filename: str,
         add_changes_to_staging: bool,
-        auto_commit_changes: bool,
+        force_commit: bool,
         az_blob_container_url: str = None,
+        az_blob_container_sas_token_upload: str = None,
+        az_blob_container_sas_token_download: str = None,
         **kwargs
         ) -> int:
     print("==================")
@@ -63,8 +65,13 @@ def process_nb(
 
             print("Converting base64 to image file and uploading it to blob storage...")  # NOQA E501
             response_status, url_path = base64_to_blob_storage(
-                base64_string, az_blob_container_url, full_path
+                base64_string,
+                az_blob_container_url + az_blob_container_sas_token_upload,
+                full_path
             )
+
+            if az_blob_container_sas_token_download:
+                url_path = url_path.split('?')[0] + az_blob_container_sas_token_download  # NOQA E501
 
             if response_status >= 200 and response_status < 300:
                 print("Successfully uploaded image to blob storage: " + url_path)  # NOQA E501
@@ -94,7 +101,7 @@ def process_nb(
             print(new_files)
             git_add(new_files)
 
-        if auto_commit_changes:  # pragma: no cover
+        if force_commit:  # pragma: no cover
             print("'--auto-commit-changes' flag set to 'True' - git hook set to return exit code 0.")  # NOQA E501
             return 0
 
