@@ -2,6 +2,7 @@ import argparse
 import mimetypes
 import os
 import re
+import traceback
 import urllib.request
 from typing import Optional, Sequence
 from urllib.parse import urlparse
@@ -116,15 +117,22 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         help='Forces `git commit` to go through even when there were some files modified with this git hook. Default behavior for `pre-commit` manager is to abort commit if git hook made any changes to staged files')  # NOQA E501
     args = parser.parse_args(argv)
 
+    if not os.path.exists(args.dotenv_file_path):
+        print("WARNING! Couldn't find dotenv file under specified path: " + args.dotenv_file_path)  # NOQA E501
     load_dotenv(verbose=True, override=True, dotenv_path=args.dotenv_file_path)
 
     az_blob_container_url = os.environ.get("AZ_BLOB_CONTAINER_URL")
     az_blob_container_sas_token_upload = os.environ.get("AZ_BLOB_CONTAINER_SAS_TOKEN_UPLOAD")  # NOQA E501
     az_blob_container_sas_token_download = os.environ.get("AZ_BLOB_CONTAINER_SAS_TOKEN_DOWNLOAD")  # NOQA E501
-    az_blob_container_url, az_blob_container_sas_token_upload, az_blob_container_sas_token_download = validate_env_vars(  # NOQA E501
-        az_blob_container_url, az_blob_container_sas_token_upload, az_blob_container_sas_token_download)  # NOQA E501
 
     retv = 0
+
+    try:
+        az_blob_container_url, az_blob_container_sas_token_upload, az_blob_container_sas_token_download = validate_env_vars(  # NOQA E501
+            az_blob_container_url, az_blob_container_sas_token_upload, az_blob_container_sas_token_download)  # NOQA E501
+    except Exception:
+        traceback.print_exc()
+        return 1
 
     for filename in args.filenames:
         return_value = process_nb(
