@@ -6,8 +6,8 @@ with open("README.md") as f:
 
 setup(
     name="pre_commit_nb",
-    version="0.1.0",
-    description="Set of git pre-commit hooks for Jupyter Notebooks compatible with https://pre-commit.com/ framework",
+    version="0.2.4a6",
+    description="Set of git pre-commit hooks for Jupyter Notebooks compatible with https://pre-commit.com/ framework",  # NOQA E501
     long_description=long_description,
     long_description_content_type="text/markdown",  # This is important!
     url="http://github.com/karolzak/pre-commit-nb",
@@ -29,10 +29,11 @@ setup(
     ],
     packages=find_packages(),
     zip_safe=False,
-    install_requires=[],
+    install_requires=['python-dotenv'],
     entry_points={
         "console_scripts": [
-            "base64-to-image-files = pre_commit_nb.base64_to_image_files:main"
+            "base64-to-image-files = pre_commit_nb.base64_to_image_files:main",
+            "base64-to-external-storage = pre_commit_nb.base64_to_external_storage:main"  # NOQA E501
         ]
     }
 )
