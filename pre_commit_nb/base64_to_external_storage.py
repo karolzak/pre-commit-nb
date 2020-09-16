@@ -58,14 +58,14 @@ def http_put_az_blob(
 
 def check_sas_token_for_correct_permissions(
         sas_token: str, permissions_list: Sequence[str]) -> bool:
-    search_results = re.search(
+    search_result = re.search(
         r"&sp=[crawl]{1,5}&",
         sas_token)
 
-    if not search_results:
+    if not search_result:
         return False
 
-    if not all(char in search_results[0] for char in permissions_list):
+    if not all(char in search_result.group() for char in permissions_list):
         return False
 
     return True
