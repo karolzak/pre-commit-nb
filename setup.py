@@ -6,7 +6,7 @@ with open("README.md") as f:
 
 setup(
     name="pre_commit_nb",
-    version="0.2.4a0",
+    version="0.2.4a1",
     description="Set of git pre-commit hooks for Jupyter Notebooks compatible with https://pre-commit.com/ framework",  # NOQA E501
     long_description=long_description,
     long_description_content_type="text/markdown",  # This is important!
@@ -29,7 +29,7 @@ setup(
     ],
     packages=find_packages(),
     zip_safe=False,
-    install_requires=[],
+    install_requires=['python-dotenv'],
     entry_points={
         "console_scripts": [
             "base64-to-image-files = pre_commit_nb.base64_to_image_files:main",
