@@ -130,7 +130,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     try:
         az_blob_container_url, az_blob_container_sas_token_upload, az_blob_container_sas_token_download = validate_env_vars(  # NOQA E501
             az_blob_container_url, az_blob_container_sas_token_upload, az_blob_container_sas_token_download)  # NOQA E501
-    except Exception:
+    except (Exception, ValueError):
         traceback.print_exc()
         return 1
 
