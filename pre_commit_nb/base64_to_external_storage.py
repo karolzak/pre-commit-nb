@@ -98,7 +98,7 @@ def validate_env_vars(
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
-    load_dotenv()
+    load_dotenv(verbose=True, override=True)
 
     az_blob_container_url = os.environ.get("AZ_BLOB_CONTAINER_URL")
     az_blob_container_sas_token_upload = os.environ.get("AZ_BLOB_CONTAINER_SAS_TOKEN_UPLOAD")  # NOQA E501

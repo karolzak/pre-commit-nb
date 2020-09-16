@@ -13,7 +13,8 @@ from pre_commit_nb.base64_to_external_storage import (
     base64_to_blob_storage, main,
     check_sas_token_for_correct_permissions, validate_env_vars)
 
-load_dotenv()  # tests doesnt work locally without this line
+# tests doesnt work locally without this line
+load_dotenv(verbose=True, override=True)
 
 TEST1_FILE = "./tests/data/test1.png"
 TEST1_B64 = "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACMSURBVDhPpc1RCsMgFETR7n/TFuIhJOqbKj0/gb479nNr//HKzc/n7AeOJyyXJHtsMm0ksoh6WXmdLSLpZHGwiKQP9T9skF7KhzqLSNk/mUWm3WBQUZ2wHDjusVmS/KIOhAVRpOyfmSqSXhYPqSLpw/vVDdKJgyrqZUWUaSNpRbXBYOB4wvLm51OtfQGRVu87E3xWdwAAAABJRU5ErkJggg=="  # NOQA 501
